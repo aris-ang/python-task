@@ -4,6 +4,7 @@ The application's main file
 import asyncio
 import time
 from dotenv import load_dotenv
+load_dotenv()
 
 from src.handlers.request_handler import RequestHandler
 from src.lib.bike_stations.sorting import python_sort
@@ -11,7 +12,6 @@ from src.lib.bike_stations.transform import clean_up,\
     merge_stations_with_addresses
 from src.lib.logger.console_logger import logger, listener
 
-load_dotenv()
 listener.start()
 
 
