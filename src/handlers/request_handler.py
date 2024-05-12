@@ -8,6 +8,7 @@ from aiohttp import ClientSession
 
 from src.exceptions.http.requests import RequestJSONError
 from src.exceptions.handlers.request_handler import RequestError
+from src.lib.bike_stations.transform import partition_station_list
 from src.lib.http.requests import request_json
 from src.lib.logger.console_logger import logger
 
@@ -91,3 +92,33 @@ class RequestHandler:
                 lng=x['coordinates'][0], lat=x['coordinates'][1]
             ) for x in bike_station_list]
         )
+
+    async def get_station_addresses_in_parts(
+            self, bike_station_list, part_size, delay
+    ):
+        """
+        Method that gets the addresses for all bike stations in a list
+        in parts to avoid rate limiting.
+        :param bike_station_list: The bike station list
+        :type bike_station_list: list of dict
+        :param part_size: the size of each part the list will be broken into.
+        :type part_size: int
+        :param delay: delay between each part
+        :type delay: float
+        :return: The list of addresses.
+        :rtype: list of str
+        """
+        logger.debug(
+            'Retrieving station addresses in %i-sized fractions', part_size
+        )
+        partitioned_list = partition_station_list(bike_station_list, part_size)
+        results = []
+        for item in partitioned_list:
+            results.extend(await asyncio.gather(
+                *[self.get_address(
+                    lng=x['coordinates'][0], lat=x['coordinates'][1]
+                ) for x in item]
+            ))
+            logger.debug('\tpartition complete. Sleeping for %f', delay)
+            await asyncio.sleep(delay)
+        return results
