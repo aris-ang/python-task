@@ -49,7 +49,7 @@ class RequestHandler:
 
         return bike_stations
 
-    async def get_address_for_point(self, lng, lat):
+    async def get_address(self, lng, lat):
         """
         Method that retrieves the address of a bike station using its location.
         :param lng: The location's longitude
@@ -77,7 +77,7 @@ class RequestHandler:
             return 'Unknown'
         return address
 
-    async def get_addresses_for_bike_stations(self, bike_station_list):
+    async def get_station_addresses(self, bike_station_list):
         """
         Method that gets the addresses for all bike stations in a list
         concurrently using asyncio.gather
@@ -87,7 +87,7 @@ class RequestHandler:
         :rtype: list of str
         """
         return await asyncio.gather(
-            *[self.get_address_for_point(
+            *[self.get_address(
                 lng=x['coordinates'][0], lat=x['coordinates'][1]
             ) for x in bike_station_list]
         )

@@ -53,7 +53,7 @@ async def part_2(step_one_list, request_handler):
     :rtype: list of dict
     """
     part_2_start = time.time()
-    address_list = await request_handler.get_addresses_for_bike_stations(
+    address_list = await request_handler.get_station_addresses(
         step_one_list
     )
     logger.debug('Address GATHER took: %f', time.time() - part_2_start)
