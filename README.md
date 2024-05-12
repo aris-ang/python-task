@@ -16,11 +16,10 @@ It took **`sorted` a maximum 0.001 seconds** to sort the list, which looks prett
 To implement step two, we have to perform a request for the location of each bike station in the list.
 Naturally, if these requests are performed sequentially, the process will become quiet time-consuming.
 
-To prevent bottleneck at this point, i have taken advantage of the asyncio package's `gather` function. **I have made use of `gather`
-to send the HTTP requests** for all the stations at the same time, then used the list of addresses (responses) to populate the bike station
-dictionaries with them.
-
-As a result of the above, the whole process of the citybike Wien Importer completes in sub-second speed average time.
+To prevent bottleneck at this point, i have taken advantage of the asyncio package's `gather` function. Due to the fact that this endpoint
+is rate-limited, in this branch i broke the bike station list down into partitions and used `gather` to perform the requests concurrently
+for each partition, adding delay between each batch. This helps find a balance between batch size and delay that makes it possible
+to complete the process as fast as possible without getting 429 responses.
 
 ## Installation and Usage
 
