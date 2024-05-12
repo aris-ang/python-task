@@ -52,9 +52,12 @@ async def part_2(step_one_list, request_handler):
     :return: The final list as requested on part 2.
     :rtype: list of dict
     """
+    partition_size = len(step_one_list)//10
     part_2_start = time.time()
-    address_list = await request_handler.get_station_addresses(
-        step_one_list
+    address_list = await request_handler.get_station_addresses_in_parts(
+        bike_station_list=step_one_list,
+        part_size=partition_size,
+        delay=1
     )
     logger.debug('Address GATHER took: %f', time.time() - part_2_start)
     merge_start = time.time()
