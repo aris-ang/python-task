@@ -35,6 +35,11 @@ async def request_json(
         ) as resp:
             return await resp.json()
     except ClientError as client_error:
-        raise RequestJSONError(client_error) from client_error
+        if resp.status is not None:
+            status_code = f'STATUS={resp.status}'
+        else:
+            status_code = 'STATUS=N/A'
+        error_message = f'{status_code} {client_error}'
+        raise RequestJSONError(error_message) from client_error
     except Exception as exc:
         raise RequestJSONError(exc) from exc
