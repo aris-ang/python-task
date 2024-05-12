@@ -46,3 +46,20 @@ async def merge_stations_with_addresses(bike_station_list, address_list):
         } for total in zip(bike_station_list, address_list)
     ]
     return result
+
+
+def partition_station_list(bike_station_list, part_size):
+    """
+    Function that breaks a bike station into pieces and returns them in a list.
+    :param part_size: the size of each partition
+    :type part_size: int
+    :param bike_station_list: The bike station list to be fragmented.
+    :type bike_station_list: list of dict
+    :return: A list of bike station lists.
+    :rtype: list[list of dict]
+    """
+    return [
+        bike_station_list[i:i + part_size] for i in range(
+            0, len(bike_station_list), part_size
+        )
+    ]
