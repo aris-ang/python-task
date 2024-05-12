@@ -22,6 +22,10 @@ dictionaries with them.
 
 As a result of the above, the whole process of the citybike Wien Importer completes in sub-second speed average time.
 
+### IMPORTANT
+During development, i observed that the `nearby address` endpoint returned status 429 due to the multiple concurrent requests.
+I have created a separate branch named `rate_limit` in which i have modified the request mechanism to prevent 429 responses,
+but the results take substantially longer to retrieve.
 ## Installation and Usage
 
 To install the project, first use `git clone` to get it from the git repo.
